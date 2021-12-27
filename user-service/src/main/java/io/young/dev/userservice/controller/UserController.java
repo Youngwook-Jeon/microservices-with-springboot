@@ -1,12 +1,15 @@
 package io.young.dev.userservice.controller;
 
+import io.young.dev.userservice.dto.UserDto;
+import io.young.dev.userservice.service.UserService;
 import io.young.dev.userservice.vo.Greeting;
+import io.young.dev.userservice.vo.RequestUser;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
+import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/")
@@ -14,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class UserController {
 
     private final Environment env;
+    private final UserService userService;
 
     @Autowired
     private Greeting greeting;
@@ -27,5 +31,15 @@ public class UserController {
     public String welcome() {
 //        return env.getProperty("greeting.message"); // 방법 1
         return greeting.getMessage(); // 방법 2
+    }
+
+    @PostMapping("/users")
+    public String createUser(@RequestBody RequestUser requestUser) {
+        ModelMapper mapper = new ModelMapper();
+        mapper.getConfiguration()
+                        .setMatchingStrategy(MatchingStrategies.STRICT);
+        UserDto userDto = mapper.map(requestUser, UserDto.class);
+        userService.createUser(userDto);
+        return "Create user method is called";
     }
 }
