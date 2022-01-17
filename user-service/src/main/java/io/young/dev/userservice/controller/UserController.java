@@ -25,12 +25,13 @@ public class UserController {
     @Autowired
     private Greeting greeting;
 
-    @GetMapping("/health_check")
+    @GetMapping("/user-service/health_check")
     public String status() {
-        return "It is working in user service!";
+        return String.format("It is working in user service on port: %s",
+                env.getProperty("local.server.port"));
     }
 
-    @GetMapping("/welcome")
+    @GetMapping("/user-service/welcome")
     public String welcome() {
 //        return env.getProperty("greeting.message"); // 방법 1
         return greeting.getMessage(); // 방법 2
