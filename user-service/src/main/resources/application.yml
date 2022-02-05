@@ -25,3 +25,6 @@ eureka:
 
 greeting:
   message: Welcome to our simple e-commerce site!
+logging:
+  level:
+    io.young.dev.userservice: DEBUG
